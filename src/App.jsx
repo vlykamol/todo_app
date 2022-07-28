@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import useLocalStorage from "./hooks/useLocalStorage";
 
 function App() {
   const [todo, setTodo] = useState("");
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useLocalStorage(`todos`, []);
 
   const addTodo = (newTodo) => {
     setTodos((todos) => {
@@ -30,6 +31,16 @@ function App() {
         type="text"
         value={todo}
         placeholder={`TASK..`}
+        onKeyDown={(e) => {
+          if(e.code === `Enter`){
+            if (todo) {
+              addTodo(todo);
+            } else {
+              window.alert(`task can't be empty`);
+            }
+            setTodo("");
+          }
+        }}
         onChange={(e) => setTodo(e.target.value)}
       />
       <button
